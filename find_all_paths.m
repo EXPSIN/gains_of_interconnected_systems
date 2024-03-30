@@ -22,13 +22,17 @@ allPaths = allPaths';
                 repeat_flag = false;
                 for idx = 1:length(allPaths)
                     repeat_flag = is_repeat_path(allPaths{idx}(1:end-1), path(1:end-1));
+                    if(repeat_flag == true)
+                        break;
+                    end
                 end
-                if ~repeat_flag
+                if repeat_flag == false
                     allPaths{end+1} = path;
                 end
             else
                 allPaths{end+1} = path;
             end
+
             return;
         end
         
@@ -47,17 +51,22 @@ allPaths = allPaths';
 
 end
 
-function repeat = is_repeat_path(path1, path2)
-% This function checks if two paths are the same.
+function repeat = is_repeat_path(path1, new_path)
+% There is a repeat node in this path
+if length(new_path) ~= length(unique(new_path))
+    repeat = true;
+    return;
+end
 
+% This function checks if two paths are the same.
 repeat = false;
-if numel(path1) ~= numel(path2)
+if numel(path1) ~= numel(new_path)
     return;
 end
 
 pathLen = numel(path1);
 for i = 1:pathLen
-    if isequal(path1, circshift(path2, i-1))
+    if isequal(path1, circshift(new_path, i-1))
         repeat = true;
         return;
     end

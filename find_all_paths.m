@@ -11,6 +11,8 @@ for startNode = 1:cnt
     dfs(startNode, startNode, used_gain, []);
 end
 allPaths = allPaths';
+[~, idx] = sort(cellfun(@length, allPaths), 'descend');
+allPaths = allPaths(idx);
 
     function dfs(currentNode, startNode, used_gain, path)
         % Add current node to the path
@@ -64,12 +66,12 @@ if numel(path1) ~= numel(new_path)
     return;
 end
 
-pathLen = numel(path1);
-for i = 1:pathLen
-    if isequal(path1, circshift(new_path, i-1))
-        repeat = true;
-        return;
-    end
-end
+% pathLen = numel(path1);
+% for i = 1:pathLen
+%     if isequal(path1, circshift(new_path, i-1))
+%         repeat = true;
+%         return;
+%     end
+% end
 
 end

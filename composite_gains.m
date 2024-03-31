@@ -9,14 +9,15 @@ gains_c = cell(cnt, 2); % Initialize cell array to store composite gains
 for i = 1:cnt
     % Initialize variables for current path
     node_cnt = length(allPaths{i});
-    path = subsystem{allPaths{i}(end)};
+    path = subsystem{allPaths{i}(1)};
     gain_c = sym('s'); % Initialize composite gain symbolically
     
     % Loop through nodes in reverse order
-    for j = node_cnt-1:-1:1
+    for j = 2:node_cnt
         % Construct current path and extract gain
-        path = [subsystem{allPaths{i}(j)}, '->', path];
-        gain = gains([subsystem{allPaths{i}(j)}, '->', subsystem{allPaths{i}(j+1)}]);
+        path = [path, '->', subsystem{allPaths{i}(j)}];
+
+        gain = gains([subsystem{allPaths{i}(j-1)}, '->', subsystem{allPaths{i}(j)}]);
         
         % Substitute symbolically calculated gain into composite gain
         gain_c = subs(gain, sym('s'), gain_c);
